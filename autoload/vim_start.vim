@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-02-13 17:17:54
+" Last Change: 2015-02-14 11:07:52
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -10,10 +10,12 @@ let s:File = vim_lib#base#File#
 let s:Publisher = vim_lib#sys#Publisher#.new()
 
 function! vim_start#render() " {{{
+  " Не отображать окно в файле. {{{
   if bufname('%') != ''
     syntax on " Иначе подсветка синтаксиса отключена
     return
   endif
+  " }}}
   let l:buf = s:Buffer.current()
   call l:buf.temp()
   call l:buf.option('filetype', 'vim-start')
@@ -42,13 +44,19 @@ function! vim_start#render() " {{{
   function! l:buf.null() " {{{
   endfunction " }}}
   function! l:buf.select() " {{{
-    exe 'cd ' . self.info[expand('<cword>')]
+    let l:prj = self.info[expand('<cword>')]
+    " Формирование истории проектов. {{{
+    call remove(self.info, index(self.info, l:prj))
+    call insert(self.info, l:prj, 0)
+    call s:File.absolute(g:vim_start#.info).rewrite(self.info)
+    " }}}
+    exe 'cd ' . l:prj
     enew
     call self.delete()
     do BufNewFile
     call g:vim_prj#.run()
     call vim_prj#loadSession()
-    call s:Publisher.fire('VimStartSelect', {'address': self.info[expand('<cword>')]})
+    call s:Publisher.fire('VimStartSelect', {'address': l:prj})
   endfunction " }}}
   function! l:buf.edit() " {{{
     enew
