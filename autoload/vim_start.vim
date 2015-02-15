@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-02-14 11:07:52
+" Last Change: 2015-02-15 16:09:05
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -67,7 +67,11 @@ function! vim_start#render() " {{{
   call l:buf.active()
 endfunction " }}}
 
-function! vim_start#add(file) " {{{
+function! vim_start#_addNewPrj(event) " {{{
+  call vim_start#add(a:event['dirprj'])
+endfunction " }}}
+
+function! vim_start#add(dir) " {{{
   let l:info = s:File.absolute(g:vim_start#.info)
-  call l:info.write(a:file['dirprj'])
+  call l:info.write(a:dir)
 endfunction " }}}

@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:51:11
-" Last Change: 2015-02-14 11:05:21
+" Last Change: 2015-02-15 15:58:38
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -14,7 +14,8 @@ let s:p.plugDir = expand('<sfile>:p:h')
 function! s:p.run() " {{{
   let self.info = self.plugDir . s:File.slash . 'vim_start' . s:File.slash . 'info'
   call s:System.au('VimEnter', function('vim_start#render'))
-  call s:Publisher.listen('VimPrjCreate', function('vim_start#add'))
+
+  call s:Publisher.listen('VimPrjCreate', function('vim_start#_addNewPrj'))
 endfunction " }}}
 
 call s:p.reg()
