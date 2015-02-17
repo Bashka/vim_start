@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-02-17 08:00:50
+" Last Change: 2015-02-17 22:31:31
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -19,14 +19,54 @@ function! vim_start#render() " {{{
   let l:buf = s:Buffer.current()
   call l:buf.temp()
   call l:buf.option('filetype', 'vim-start')
+  " Заголовок. {{{
+  let l:headerSize = 0
+  if type(g:vim_start#.header) != 3 || g:vim_start#.header != []
+    if type(g:vim_start#.header) == 2
+      let l:headerRes = g:vim_start#.header()
+      if type(l:headerRes) == 1
+        let l:header = split(l:headerRes, "\n")
+      else
+        let l:header = l:headerRes
+      endif
+    else
+      let l:header = g:vim_start#.header
+    endif
+    call s:Content.add(1, l:header)
+    let l:headerSize = len(l:header)
+  endif
+  " }}}
+  " Тело. {{{
   let l:buf.info = s:File.absolute(g:vim_start#.info).read()
-  let l:i = 0
+  let l:i = 1
   for l:address in l:buf.info
-    call s:Content.add(l:i + 1, l:i . ']' . "\t" . l:address)
+    call s:Content.add(l:i + l:headerSize, l:i . ']' . "\t" . l:address)
     let l:i += 1
   endfor
+  call s:Content.add(l:i + l:headerSize, '')
+  let l:i += 1
+  call s:Content.add(l:i + l:headerSize, 'e]' . "\t" . 'Open new buffer')
+  let l:i += 1
+  call s:Content.add(l:i + l:headerSize, 'i]' . "\t" . 'Open new buffer and insert mode')
+  let l:i += 1
+  " }}}
+  " Подвал. {{{
+  if type(g:vim_start#.footer) != 3 || g:vim_start#.footer != []
+    if type(g:vim_start#.footer) == 2
+      let l:footerRes = g:vim_start#.footer()
+      if type(l:footerRes) == 1
+        let l:footer = split(l:footerRes, "\n")
+      else
+        let l:footer = l:footerRes
+      endif
+    else
+      let l:footer = g:vim_start#.footer
+    endif
+    call s:Content.add(l:i + l:headerSize, l:footer)
+  endif
+  " }}}
   normal Gdd
-  call s:Content.pos({'l': 1, 'c': 1})
+  call s:Content.pos({'l': 1 + l:headerSize, 'c': 1})
 
   call l:buf.map('n', '<Enter>', 'select')
   call l:buf.map('n', 'e', 'edit')
@@ -46,7 +86,7 @@ function! vim_start#render() " {{{
   function! l:buf.null() " {{{
   endfunction " }}}
   function! l:buf.select() " {{{
-    let l:prj = self.info[expand('<cword>')]
+    let l:prj = self.info[expand('<cword>') - 1]
     " Формирование истории проектов. {{{
     call remove(self.info, index(self.info, l:prj))
     call insert(self.info, l:prj, 0)

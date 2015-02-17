@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:51:11
-" Last Change: 2015-02-15 15:58:38
+" Last Change: 2015-02-17 22:17:54
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -9,6 +9,8 @@ let s:System = vim_lib#sys#System#.new()
 let s:Publisher = vim_lib#sys#Publisher#.new()
 
 let s:p = s:Plugin.new('vim_start', '1', {'plugins': ['vim_prj']})
+let s:p.header = []
+let s:p.footer = []
 let s:p.plugDir = expand('<sfile>:p:h')
 
 function! s:p.run() " {{{
