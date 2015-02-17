@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-02-16 17:38:45
+" Last Change: 2015-02-17 07:41:08
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -30,6 +30,8 @@ function! vim_start#render() " {{{
 
   call l:buf.map('n', '<Enter>', 'select')
   call l:buf.map('n', 'e', 'edit')
+  call l:buf.map('n', 'i', 'insert')
+  call l:buf.map('n', 'a', 'insert')
   call l:buf.map('n', 'h', 'null')
   call l:buf.map('n', 'l', 'null')
   call l:buf.map('n', 'w', 'null')
@@ -63,6 +65,13 @@ function! vim_start#render() " {{{
     call self.delete()
     do BufNewFile
     call s:Publisher.fire('VimStartEdit')
+  endfunction " }}}
+  function! l:buf.insert() " {{{
+    enew
+    call self.delete()
+    do BufNewFile
+    call s:Publisher.fire('VimStartEdit')
+    startinsert
   endfunction " }}}
   call l:buf.active()
 endfunction " }}}
