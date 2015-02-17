@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-02-17 07:41:08
+" Last Change: 2015-02-17 08:00:50
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -22,11 +22,11 @@ function! vim_start#render() " {{{
   let l:buf.info = s:File.absolute(g:vim_start#.info).read()
   let l:i = 0
   for l:address in l:buf.info
-    call s:Content.add(l:i + 1, '[' . l:i . ']' . "\t" . l:address)
+    call s:Content.add(l:i + 1, l:i . ']' . "\t" . l:address)
     let l:i += 1
   endfor
   normal Gdd
-  call s:Content.pos({'l': 1, 'c': 2})
+  call s:Content.pos({'l': 1, 'c': 1})
 
   call l:buf.map('n', '<Enter>', 'select')
   call l:buf.map('n', 'e', 'edit')
