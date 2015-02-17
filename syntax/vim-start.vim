@@ -1,5 +1,5 @@
 syntax sync fromstart
-syntax match NumberPoint /^\zs[ie0-9]\+\ze\]/
+syntax match NumberPoint /^\zs[qie0-9]\+\ze\]/
 syntax match NumberPoint /^\zs\ze\]/
 syntax match ProjectName /\/\zs[^\/\\]\+\ze$/
 syntax match ProjectName /\\\zs[^\/\\]\+\ze$/
