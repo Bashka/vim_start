@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-02-17 22:39:40
+" Last Change: 2015-02-18 11:09:19
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -47,7 +47,7 @@ function! vim_start#render() " {{{
   let l:i += 1
   call s:Content.add(l:i + l:headerSize, 'e]' . "\t" . 'Open new buffer')
   let l:i += 1
-  call s:Content.add(l:i + l:headerSize, 'i]' . "\t" . 'Open new buffer and insert mode')
+  call s:Content.add(l:i + l:headerSize, 'i]' . "\t" . 'Open new buffer and start insert mode')
   let l:i += 1
   call s:Content.add(l:i + l:headerSize, 'q]' . "\t" . 'Quit')
   let l:i += 1
