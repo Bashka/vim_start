@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-02-18 11:09:19
+" Last Change: 2015-02-19 17:00:26
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -11,7 +11,7 @@ let s:Publisher = vim_lib#sys#Publisher#.new()
 
 function! vim_start#render() " {{{
   " Не отображать окно в файле. {{{
-  if !s:Content.isEmpty()
+  if !s:Content.isEmpty() || bufname('%') != ''
     syntax on " Иначе подсветка синтаксиса отключена
     return
   endif
