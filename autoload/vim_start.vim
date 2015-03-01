@@ -1,11 +1,10 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-03-01 12:53:35
+" Last Change: 2015-03-01 12:55:10
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
 let s:Buffer = vim_lib#sys#Buffer#
 let s:Content = vim_lib#sys#Content#.new()
-let s:System = vim_lib#sys#System#.new()
 let s:File = vim_lib#base#File#
 let s:Publisher = vim_lib#sys#Publisher#.new()
 
