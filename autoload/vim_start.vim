@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-02-19 17:00:26
+" Last Change: 2015-03-01 12:53:35
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -49,6 +49,8 @@ function! vim_start#render() " {{{
   let l:i += 1
   call s:Content.add(l:i + l:headerSize, 'i]' . "\t" . 'Open new buffer and start insert mode')
   let l:i += 1
+  call s:Content.add(l:i + l:headerSize, 'E]' . "\t" . 'Edit menu')
+  let l:i += 1
   call s:Content.add(l:i + l:headerSize, 'q]' . "\t" . 'Quit')
   let l:i += 1
   " }}}
@@ -74,6 +76,7 @@ function! vim_start#render() " {{{
   call l:buf.map('n', 'e', 'edit')
   call l:buf.map('n', 'i', 'insert')
   call l:buf.map('n', 'a', 'insert')
+  call l:buf.map('n', 'E', 'editMenu')
   call l:buf.map('n', 'q', 'quit')
   call l:buf.map('n', 'h', 'null')
   call l:buf.map('n', 'l', 'null')
@@ -108,6 +111,12 @@ function! vim_start#render() " {{{
     call self.delete()
     do BufNewFile
     call s:Publisher.fire('VimStartEdit')
+  endfunction " }}}
+  function! l:buf.editMenu() " {{{
+    enew
+    exe 'e ' . g:vim_start#.info
+    call self.delete()
+    do BufNewFile
   endfunction " }}}
   function! l:buf.insert() " {{{
     enew
