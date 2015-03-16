@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-03-01 12:55:10
+" Last Change: 2015-03-16 19:07:49
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -18,58 +18,56 @@ function! vim_start#render() " {{{
   let l:buf = s:Buffer.current()
   call l:buf.temp()
   call l:buf.option('filetype', 'vim-start')
-  " Заголовок. {{{
-  let l:headerSize = 0
-  if type(g:vim_start#.header) != 3 || g:vim_start#.header != []
-    if type(g:vim_start#.header) == 2
-      let l:headerRes = g:vim_start#.header()
-      if type(l:headerRes) == 1
-        let l:header = split(l:headerRes, "\n")
+  function! l:buf.render() " {{{
+    let l:result = ['" Start menu (Press ? for help) "']
+    " Заголовок. {{{
+    if type(g:vim_start#.header) != 3 || g:vim_start#.header != []
+      if type(g:vim_start#.header) == 2
+        let l:headerRes = g:vim_start#.header()
+        if type(l:headerRes) == 1
+          let l:header = split(l:headerRes, "\n")
+        else
+          let l:header = l:headerRes
+        endif
       else
-        let l:header = l:headerRes
+        let l:header = g:vim_start#.header
       endif
-    else
-      let l:header = g:vim_start#.header
+      let l:result += l:header
     endif
-    call s:Content.add(1, l:header)
-    let l:headerSize = len(l:header)
-  endif
-  " }}}
-  " Тело. {{{
-  let l:buf.info = s:File.absolute(g:vim_start#.info).read()
-  let l:i = 1
-  for l:address in l:buf.info
-    call s:Content.add(l:i + l:headerSize, l:i . ']' . "\t" . l:address)
-    let l:i += 1
-  endfor
-  call s:Content.add(l:i + l:headerSize, '')
-  let l:i += 1
-  call s:Content.add(l:i + l:headerSize, 'e]' . "\t" . 'Open new buffer')
-  let l:i += 1
-  call s:Content.add(l:i + l:headerSize, 'i]' . "\t" . 'Open new buffer and start insert mode')
-  let l:i += 1
-  call s:Content.add(l:i + l:headerSize, 'E]' . "\t" . 'Edit menu')
-  let l:i += 1
-  call s:Content.add(l:i + l:headerSize, 'q]' . "\t" . 'Quit')
-  let l:i += 1
-  " }}}
-  " Подвал. {{{
-  if type(g:vim_start#.footer) != 3 || g:vim_start#.footer != []
-    if type(g:vim_start#.footer) == 2
-      let l:footerRes = g:vim_start#.footer()
-      if type(l:footerRes) == 1
-        let l:footer = split(l:footerRes, "\n")
+    " }}}
+    " Тело. {{{
+    let self.info = s:File.absolute(g:vim_start#.info).read()
+    let l:i = 1
+    for l:address in self.info
+      call add(l:result, l:i . ']' . "\t" . l:address)
+      let l:i += 1
+    endfor
+    let l:specialComm = [
+                       \ '', 
+                       \ 'e]' . "\t" . 'Open new buffer',
+                       \ 'i]' . "\t" . 'Open new buffer and start insert mode',
+                       \ 'E]' . "\t" . 'Edit menu',
+                       \ 'q]' . "\t" . 'Quit',
+                       \]
+    let l:result += l:specialComm
+    " }}}
+    " Подвал. {{{
+    if type(g:vim_start#.footer) != 3 || g:vim_start#.footer != []
+      if type(g:vim_start#.footer) == 2
+        let l:footerRes = g:vim_start#.footer()
+        if type(l:footerRes) == 1
+          let l:footer = split(l:footerRes, "\n")
+        else
+          let l:footer = l:footerRes
+        endif
       else
-        let l:footer = l:footerRes
+        let l:footer = g:vim_start#.footer
       endif
-    else
-      let l:footer = g:vim_start#.footer
+      let l:result += l:footer
     endif
-    call s:Content.add(l:i + l:headerSize, l:footer)
-  endif
-  " }}}
-  normal Gdd
-  call s:Content.pos({'l': 1 + l:headerSize, 'c': 1})
+    " }}}
+    return l:result
+  endfunction " }}}
 
   call l:buf.map('n', '<Enter>', 'select')
   call l:buf.map('n', 'e', 'edit')
@@ -126,6 +124,24 @@ function! vim_start#render() " {{{
   endfunction " }}}
   function! l:buf.quit() " {{{
     q
+  endfunction " }}}
+
+  call l:buf.map('n', '?', 'showHelp')
+  " Подсказки. {{{
+  let l:buf.help = ['" Manual "',
+                  \ '',
+                  \ '" Enter - open project',
+                  \ ''
+                  \]
+  " }}}
+  function! l:buf.showHelp() " {{{
+    if s:Content.line(1) != self.help[0]
+      let self.pos = s:Content.pos()
+      call s:Content.add(1, self.help)
+    else
+      call self.active()
+      call s:Content.pos(self.pos)
+    endif
   endfunction " }}}
   call l:buf.active()
 endfunction " }}}
