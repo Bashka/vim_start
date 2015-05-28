@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-05-28 18:31:36
+" Last Change: 2015-05-28 18:51:13
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -90,13 +90,18 @@ function! vim_start#render() " {{{
   endfunction " }}}
   function! l:buf.select() " {{{
     let l:prj = self.info[expand('<cword>') - 1]
+
     " Формирование истории проектов. {{{
     call remove(self.info, index(self.info, l:prj))
     call insert(self.info, l:prj, 0)
     call s:File.absolute(g:vim_start#.info).rewrite(self.info)
     " }}}
+
     call s:Publisher.fire('VimStartSelect', {'address': l:prj})
+
     exe 'silent !cd ' . l:prj . ' && vim '
+
+    call s:Buffer.current().active()
     redraw!
   endfunction " }}}
   function! l:buf.edit() " {{{
