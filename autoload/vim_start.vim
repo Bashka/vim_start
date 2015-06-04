@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-05-28 18:51:13
+" Last Change: 2015-06-04 23:21:07
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -101,8 +101,12 @@ function! vim_start#render() " {{{
 
     exe 'silent !cd ' . l:prj . ' && vim '
 
-    call s:Buffer.current().active()
-    redraw!
+    if g:vim_start#.isRestartAfterSelect
+      call s:Buffer.current().active()
+      redraw!
+    else
+      q!
+    endif
   endfunction " }}}
   function! l:buf.edit() " {{{
     enew

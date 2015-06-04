@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:51:11
-" Last Change: 2015-03-16 23:06:06
+" Last Change: 2015-06-04 23:21:55
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -21,6 +21,10 @@ let s:p.footer = []
 " @var string Абсолютный адрес до файла меню.
 "" }}}
 let s:p.info = expand('<sfile>:p:h') . s:File.slash . 'vim_start' . s:File.slash . 'info'
+"" {{{
+" @var bool Флаг определяет, следует ли показывать стартовое меню после выхода из проекта.
+"" }}}
+let s:p.isRestartAfterSelect = 1
 
 function! s:p.run() " {{{
   call s:System.au('VimEnter', function('vim_start#render'))
