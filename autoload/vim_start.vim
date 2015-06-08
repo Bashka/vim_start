@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-06-04 23:21:07
+" Last Change: 2015-06-08 18:09:24
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -36,7 +36,13 @@ function! vim_start#render() " {{{
     endif
     " }}}
     " Тело. {{{
-    let self.info = s:File.absolute(g:vim_start#.info).read()
+    let l:infoFile = s:File.absolute(g:vim_start#.info)
+    if !l:infoFile.isExists()
+      call l:infoFile.createFile()
+      let self.info = []
+    else
+      let self.info = l:infoFile.read()
+    endif
     let l:i = 1
     for l:address in self.info
       call add(l:result, l:i . ']' . "\t" . l:address)
@@ -157,5 +163,8 @@ endfunction " }}}
 
 function! vim_start#add(dir) " {{{
   let l:info = s:File.absolute(g:vim_start#.info)
+  if !l:info.isExists()
+    call l:info.createFile()
+  endif
   call l:info.write(a:dir)
 endfunction " }}}
