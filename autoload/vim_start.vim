@@ -1,5 +1,5 @@
 " Date Create: 2015-02-13 15:53:16
-" Last Change: 2015-06-08 18:09:24
+" Last Change: 2015-06-15 15:37:31
 " Author: Artur Sh. Mamedbekov (Artur-Mamedbekov@yandex.ru)
 " License: GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
 
@@ -105,7 +105,11 @@ function! vim_start#render() " {{{
 
     call s:Publisher.fire('VimStartSelect', {'address': l:prj})
 
-    exe 'silent !cd ' . l:prj . ' && vim '
+    if &term == 'builtin_gui'
+      exe 'silent !cd ' . l:prj . ' && gvim '
+    else
+      exe 'silent !cd ' . l:prj . ' && vim '
+    endif
 
     if g:vim_start#.isRestartAfterSelect
       call s:Buffer.current().active()
